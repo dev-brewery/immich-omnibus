@@ -1,0 +1,11 @@
+#!/command/with-contenv sh
+if [ "${DISABLE_MACHINE_LEARNING}" = "true" ]; then
+    echo "[immich-ml] Machine learning disabled, sleeping."
+    exec s6-sleep infinity
+fi
+
+cd /opt/immich-ml
+export MACHINE_LEARNING_PORT="${ML_PORT:-3003}"
+export MACHINE_LEARNING_CACHE_FOLDER="/data/model-cache"
+
+exec python -m app.main

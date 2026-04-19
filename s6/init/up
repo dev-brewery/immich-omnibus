@@ -1,0 +1,3 @@
+#!/bin/sh
+# Signal that init is complete
+s6-echo "[s6-init] First-run initialization complete."

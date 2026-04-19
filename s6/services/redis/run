@@ -1,0 +1,13 @@
+#!/command/with-contenv sh
+mkdir -p /var/run/redis /data/redis
+chown -R redis:redis /var/run/redis /data/redis
+
+exec chpst -u redis redis-server \
+    --dir /data/redis \
+    --port 0 \
+    --unixsocket /var/run/redis/redis.sock \
+    --unixsocketperm 777 \
+    --maxmemory 256mb \
+    --maxmemory-policy allkeys-lru \
+    --save 60 1000 \
+    --save 300 100

@@ -1,0 +1,29 @@
+#!/command/with-contenv sh
+# Database init on first run
+if [ ! -f "${DB_DATA_LOCATION:-/data/postgres}/PG_VERSION" ]; then
+    echo "[postgres] Initializing database..."
+    mkdir -p "${DB_DATA_LOCATION:-/data/postgres}"
+    chown -R postgres:postgres "${DB_DATA_LOCATION:-/data/postgres}"
+    
+    pg_ctl init -D "${DB_DATA_LOCATION:-/data/postgres}" \
+        -o "--data-checksums" -o "--encoding=UTF8" -o "--locale=C"
+    
+    pg_ctl -D "${DB_DATA_LOCATION:-/data/postgres}" -o "-p ${DB_PORT:-5432}" -w start
+    
+    psql -p "${DB_PORT:-5432}" -c "CREATE USER ${DB_USERNAME:-immich} WITH PASSWORD '${DB_PASSWORD:-immich}';" 2>/dev/null || true
+    psql -p "${DB_PORT:-5432}" -c "CREATE DATABASE ${DB_DATABASE_NAME:-immich} OWNER ${DB_USERNAME:-immich};" 2>/dev/null || true
+    psql -d "${DB_DATABASE_NAME:-immich}" -p "${DB_PORT:-5432}" -c "CREATE EXTENSION IF NOT EXISTS vector;" 2>/dev/null || true
+    psql -d "${DB_DATABASE_NAME:-immich}" -p "${DB_PORT:-5432}" -c "CREATE EXTENSION IF NOT EXISTS vectorscale;" 2>/dev/null || true
+    
+    pg_ctl -D "${DB_DATA_LOCATION:-/data/postgres}" -m fast -w stop
+    echo "[postgres] Initialization complete."
+fi
+
+# Ensure runtime dir exists
+mkdir -p /var/run/postgresql
+chown postgres:postgres /var/run/postgresql
+
+exec chpst -u postgres postgres \
+    -D "${DB_DATA_LOCATION:-/data/postgres}" \
+    -p "${DB_PORT:-5432}" \
+    -k /var/run/postgresql

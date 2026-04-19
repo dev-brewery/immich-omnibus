@@ -1,0 +1,21 @@
+#!/command/with-contenv sh
+# Wait for postgres to be ready
+echo "[immich-server] Waiting for PostgreSQL..."
+until pg_isready -h "${DB_HOST:-/var/run/postgresql}" -p "${DB_PORT:-5432}" -q 2>/dev/null; do
+    s6-sleep 1
+done
+echo "[immich-server] PostgreSQL ready."
+
+# Wait for Redis socket
+echo "[immich-server] Waiting for Redis..."
+until [ -S /var/run/redis/redis.sock ]; do
+    s6-sleep 1
+done
+echo "[immich-server] Redis ready."
+
+cd /opt/immich-server
+export IMMICH_PORT="${IMMICH_PORT:-2283}"
+export DB_URL="postgresql://${DB_USERNAME:-immich}:${DB_PASSWORD:-immich}@${DB_HOST:-/var/run/postgresql}:${DB_PORT:-5432}/${DB_DATABASE_NAME:-immich}"
+export REDIS_URL="unix://${REDIS_HOSTNAME:-/var/run/redis/redis.sock}"
+
+exec node dist/main
