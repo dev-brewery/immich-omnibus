@@ -1,0 +1,13 @@
+# Build context (extracted upstream image paths)
+ctx/
+
+# Runtime/env artifacts
+.env
+*.log
+
+# Editor/tool scratch
+tmp_*.ps1
+tmp_*.sh
+
+# Local-only material: machine paths and working notes
+.config/
