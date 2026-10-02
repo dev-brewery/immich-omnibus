@@ -1,0 +1,66 @@
+﻿--- dockerd.log tail ---
+logDir=C:\Users\LOCAL_USER\AppData\Local\Docker\log\vm
+latest=C:\Users\LOCAL_USER\AppData\Local\Docker\log\vm\dockerd.log size=0.48MB mtime=12/09/2025 05:40:13
+2025/12/09 10:36:02 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:36:07 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:36:12 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:36:17 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:36:23.864305665Z" level=error msg="copy stream failed" error="reading from a closed fifo" stream=stderr
+time="2025-12-09T10:36:23.864310817Z" level=error msg="copy stream failed" error="reading from a closed fifo" stream=stdout
+time="2025-12-09T10:36:23.866533322Z" level=warning msg="Health check for container 234e2dc00d73b418d8485af1ef4e93b3a1c88b241f18c3234cf681406e46f5af error: OCI runtime exec failed: exec failed: unable to start container process: exec: \"curl\": executable file not found in $PATH: unknown"
+2025/12/09 10:36:27 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:36:32 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:36:37 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:36:47 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:36:53.952497680Z" level=error msg="copy stream failed" error="reading from a closed fifo" stream=stdout
+time="2025-12-09T10:36:53.952514740Z" level=error msg="copy stream failed" error="reading from a closed fifo" stream=stderr
+time="2025-12-09T10:36:53.954835754Z" level=warning msg="Health check for container 234e2dc00d73b418d8485af1ef4e93b3a1c88b241f18c3234cf681406e46f5af error: OCI runtime exec failed: exec failed: unable to start container process: exec: \"curl\": executable file not found in $PATH: unknown"
+2025/12/09 10:36:57 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:37:02 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:37:07 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:37:12 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:37:16.478016328Z" level=info msg="ignoring event" container=ca357246af5684c6e9cd9c755de839e3de9b729425880bf373b9c31bf2222d70 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+time="2025-12-09T10:37:16.541740904Z" level=warning msg="ShouldRestart failed, container will not be restarted" container=ca357246af5684c6e9cd9c755de839e3de9b729425880bf373b9c31bf2222d70 daemonShuttingDown=false error="restart canceled" execDuration=84h40m59.370209836s exitStatus="{0 2025-12-09 10:37:16.463618096 +0000 UTC}" hasBeenManuallyStopped=true restartCount=0
+2025/12/09 10:37:17 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:37:22 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:37:24.048572950Z" level=error msg="copy stream failed" error="reading from a closed fifo" stream=stdout
+time="2025-12-09T10:37:24.048628925Z" level=error msg="copy stream failed" error="reading from a closed fifo" stream=stderr
+time="2025-12-09T10:37:24.050748512Z" level=warning msg="Health check for container 234e2dc00d73b418d8485af1ef4e93b3a1c88b241f18c3234cf681406e46f5af error: OCI runtime exec failed: exec failed: unable to start container process: exec: \"curl\": executable file not found in $PATH: unknown"
+2025/12/09 10:37:27 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:37:28.746106484Z" level=info msg="Container failed to exit within 10s of signal 15 - using the force" container=2e047bf19d9814b1a59344d72e75d0b3e3e68b123e53f1727999eae85186b424 spanID=5b46002b425c18a6 traceID=bc4247f7739d1ad972ebc65ec30ab179
+time="2025-12-09T10:37:28.790540976Z" level=info msg="ignoring event" container=2e047bf19d9814b1a59344d72e75d0b3e3e68b123e53f1727999eae85186b424 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+time="2025-12-09T10:37:28.808814275Z" level=warning msg="ShouldRestart failed, container will not be restarted" container=2e047bf19d9814b1a59344d72e75d0b3e3e68b123e53f1727999eae85186b424 daemonShuttingDown=false error="restart canceled" execDuration=84h41m11.648205197s exitStatus="{137 2025-12-09 10:37:28.781699492 +0000 UTC}" hasBeenManuallyStopped=true restartCount=0
+2025/12/09 10:37:32 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:37:33.526125116Z" level=info msg="ignoring event" container=9a54a5c6b6b0bc6cfeff7cad76a9509bf16fac66beee7f98ba0bab87f3048b66 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+time="2025-12-09T10:37:33.543928013Z" level=warning msg="ShouldRestart failed, container will not be restarted" container=9a54a5c6b6b0bc6cfeff7cad76a9509bf16fac66beee7f98ba0bab87f3048b66 daemonShuttingDown=false error="restart canceled" execDuration=84h20m55.084825784s exitStatus="{143 2025-12-09 10:37:33.512934381 +0000 UTC}" hasBeenManuallyStopped=true restartCount=0
+time="2025-12-09T10:37:33.855846059Z" level=info msg="ignoring event" container=4e6c615621b98055cc35dbaadc26d36156688affa4bb8d50e1be6f104466609a module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+time="2025-12-09T10:37:33.882148591Z" level=warning msg="ShouldRestart failed, container will not be restarted" container=4e6c615621b98055cc35dbaadc26d36156688affa4bb8d50e1be6f104466609a daemonShuttingDown=false error="restart canceled" execDuration=84h20m55.427401841s exitStatus="{0 2025-12-09 10:37:33.835270646 +0000 UTC}" hasBeenManuallyStopped=true restartCount=0
+time="2025-12-09T10:37:33.982323859Z" level=info msg="ignoring event" container=0b42b240a5035ef9799a05cf3b51bcbb2b7cc8dff7e3dce14acd138c14192858 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+time="2025-12-09T10:37:33.998581880Z" level=warning msg="ShouldRestart failed, container will not be restarted" container=0b42b240a5035ef9799a05cf3b51bcbb2b7cc8dff7e3dce14acd138c14192858 daemonShuttingDown=false error="restart canceled" execDuration=35h51m54.286968947s exitStatus="{0 2025-12-09 10:37:33.971926766 +0000 UTC}" hasBeenManuallyStopped=true restartCount=0
+time="2025-12-09T10:37:34.476983875Z" level=info msg="ignoring event" container=245e2a4aa15a6ba4a0bc5b96076a956f729861030f2a46575aa3aab1da4f8c85 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+time="2025-12-09T10:37:34.492758088Z" level=warning msg="ShouldRestart failed, container will not be restarted" container=245e2a4aa15a6ba4a0bc5b96076a956f729861030f2a46575aa3aab1da4f8c85 daemonShuttingDown=false error="restart canceled" execDuration=35h51m54.776851442s exitStatus="{0 2025-12-09 10:37:34.465690742 +0000 UTC}" hasBeenManuallyStopped=true restartCount=0
+2025/12/09 10:37:37 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:37:42 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:37:47 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:37:50.388350423Z" level=info msg="Container failed to exit within 10s of signal 15 - using the force" container=9eebf73840b4e693811e839117c86a49e95183e69b3d3d0e81cf87a2b12c8630 spanID=c7ff4edd098f8509 traceID=bb5bd1bdddc956be3c4c95e5e7560145
+time="2025-12-09T10:37:50.431656241Z" level=info msg="ignoring event" container=9eebf73840b4e693811e839117c86a49e95183e69b3d3d0e81cf87a2b12c8630 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+time="2025-12-09T10:37:50.448806149Z" level=warning msg="ShouldRestart failed, container will not be restarted" container=9eebf73840b4e693811e839117c86a49e95183e69b3d3d0e81cf87a2b12c8630 daemonShuttingDown=false error="restart canceled" execDuration=6h53m42.389039358s exitStatus="{137 2025-12-09 10:37:50.4191161 +0000 UTC}" hasBeenManuallyStopped=true restartCount=0
+2025/12/09 10:37:52 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:37:54.154398638Z" level=error msg="copy stream failed" error="reading from a closed fifo" stream=stdout
+time="2025-12-09T10:37:54.154640837Z" level=error msg="copy stream failed" error="reading from a closed fifo" stream=stderr
+time="2025-12-09T10:37:54.157201123Z" level=warning msg="Health check for container 234e2dc00d73b418d8485af1ef4e93b3a1c88b241f18c3234cf681406e46f5af error: OCI runtime exec failed: exec failed: unable to start container process: exec: \"curl\": executable file not found in $PATH: unknown"
+2025/12/09 10:37:57 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+time="2025-12-09T10:38:00.780659654Z" level=info msg="Container failed to exit within 10s of signal 15 - using the force" container=234e2dc00d73b418d8485af1ef4e93b3a1c88b241f18c3234cf681406e46f5af spanID=adfa6c7c24b79dba traceID=bb5bd1bdddc956be3c4c95e5e7560145
+time="2025-12-09T10:38:01.151445696Z" level=info msg="ignoring event" container=234e2dc00d73b418d8485af1ef4e93b3a1c88b241f18c3234cf681406e46f5af module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+time="2025-12-09T10:38:01.166132988Z" level=warning msg="ShouldRestart failed, container will not be restarted" container=234e2dc00d73b418d8485af1ef4e93b3a1c88b241f18c3234cf681406e46f5af daemonShuttingDown=false error="restart canceled" execDuration=22m34.845320313s exitStatus="{137 2025-12-09 10:38:01.134397323 +0000 UTC}" hasBeenManuallyStopped=true restartCount=18
+2025/12/09 10:38:02 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:38:12 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:38:57 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:39:02 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:39:12 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:39:58 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:40:03 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+2025/12/09 10:40:13 traces export: rpc error: code = Unimplemented desc = unknown service opentelemetry.proto.collector.trace.v1.TraceService
+---
+--- Docker buildx-data ---
+C:\Users\LOCAL_USER\AppData\Local\Docker\wsl\data missing

@@ -1,0 +1,17 @@
+[0;32m=== Photoframe Immich Build ===[0m
+Image: devbrewery/photoframe-immich
+Version: latest
+
+[1;33mCreating buildx builder...[0m
+#1 [internal] booting buildkit
+#1 pulling image moby/buildkit:buildx-stable-1
+#1 pulling image moby/buildkit:buildx-stable-1 0.9s done
+#1 creating container buildx_buildkit_photoframe-builder0
+#1 creating container buildx_buildkit_photoframe-builder0 2.0s done
+#1 DONE 2.9s
+photoframe-builder
+
+[0;32mBuilding for: linux/amd64,linux/arm64[0m
+
+[1;33mBuilding locally (not pushing)...[0m
+ERROR: failed to build: docker exporter does not currently support exporting manifest lists

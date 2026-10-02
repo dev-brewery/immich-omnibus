@@ -1,0 +1,5 @@
+﻿--- docker_data.vhdx ---
+C:\Users\LOCAL_USER\AppData\Local\Docker\wsl\disk\docker_data.vhdx 137.53 GB 04/21/2026 11:35:10
+--- WSL distro VHDs ---
+C:\Users\LOCAL_USER\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu24.04LTS_79rhkp1fndgsc\LocalState\ext4.vhdx 47.12 GB
+C:\Users\LOCAL_USER\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu_79rhkp1fndgsc\LocalState\ext4.vhdx 2.26 GB

@@ -1,0 +1,150 @@
+# Photoframe Immich - All-in-One Omnibus Image
+#
+# Cross-image content (libvips/libheif/python/ML code/jellyfin-ffmpeg) is
+# extracted from ghcr.io/immich-app/immich-server and immich-machine-learning
+# by build.sh (docker create + docker cp) into ./ctx/<arch>/ before buildx is
+# invoked. This avoids BuildKit cross-image COPY, which produced 0-byte files
+# under the docker-container driver and corrupted the content store on large
+# cumulative copies.
+
+ARG IMMICH_VERSION=v2.7.5
+
+# === Stage 1: Download s6-overlay ===
+FROM alpine:3.21 AS s6-downloader
+ARG S6_VERSION=v3.2.2.0
+ARG TARGETARCH
+RUN apk add --no-cache curl xz
+RUN if [ "$TARGETARCH" = "amd64" ]; then S6_ARCH=x86_64; \
+    elif [ "$TARGETARCH" = "arm64" ]; then S6_ARCH=aarch64; \
+    else S6_ARCH=$TARGETARCH; fi && \
+    curl -fsSL "https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-noarch.tar.xz" \
+      -o /tmp/s6-overlay-noarch.tar.xz && \
+    curl -fsSL "https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.xz" \
+      -o /tmp/s6-overlay-arch.tar.xz
+
+# === Stage 2: Download VectorChord .deb (proven method from Proxmox script) ===
+FROM alpine:3.21 AS vchord-downloader
+ARG TARGETARCH
+ARG VCHORD_VERSION=0.5.3
+RUN apk add --no-cache curl
+RUN mkdir -p /tmp/vchord && \
+    if [ "$TARGETARCH" = "amd64" ]; then VCHORD_ARCH=amd64; \
+    elif [ "$TARGETARCH" = "arm64" ]; then VCHORD_ARCH=arm64; \
+    else VCHORD_ARCH=$TARGETARCH; fi && \
+    curl -fsSL "https://github.com/tensorchord/VectorChord/releases/download/${VCHORD_VERSION}/postgresql-17-vchord_${VCHORD_VERSION}-1_${VCHORD_ARCH}.deb" \
+      -o /tmp/vchord/vchord.deb
+
+# === Stage 3: Final omnibus image ===
+# Matches Immich v2.7.5 base (node:24-trixie-slim) so extracted server
+# native modules (sharp/libvips) stay ABI-compatible with the runtime Node.
+FROM node:24-trixie-slim
+
+ARG IMMICH_VERSION
+ARG TARGETARCH
+
+# Install PostgreSQL 17, Redis, and runtime libs from trixie repos
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl ca-certificates xz-utils procps tini gosu netcat-openbsd \
+    postgresql-17 postgresql-client-17 postgresql-common postgresql-17-pgvector \
+    redis-server redis-tools \
+    libglib2.0-0 libexpat1 libexif12 libspng0 \
+    libwebp7 libwebpmux3 libwebpdemux2 \
+    librsvg2-2 libcairo2 liblcms2-2 \
+    libopenexr-3-1-30 libopenjp2-7 libhwy1t64 \
+    libde265-0 liblqr-1-0 libgomp1 libltdl7 \
+    libgsf-1-114 libaom3 libmimalloc3 libio-compress-brotli-perl \
+    libbluray2 libvpx9 libzvbi0 libmp3lame0 libopus0 libtheora0 \
+    libvorbis0a libvorbisenc2 libx264-164 libopenmpt0 libdav1d7 \
+    mesa-va-drivers mesa-vulkan-drivers ocl-icd-libopencl1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install VectorChord extension (same method as Proxmox script)
+COPY --from=vchord-downloader /tmp/vchord/vchord.deb /tmp/vchord.deb
+RUN dpkg -i /tmp/vchord.deb && rm /tmp/vchord.deb
+
+# Install s6-overlay
+COPY --from=s6-downloader /tmp/s6-overlay-noarch.tar.xz /tmp/
+COPY --from=s6-downloader /tmp/s6-overlay-arch.tar.xz /tmp/
+RUN tar -xJf /tmp/s6-overlay-noarch.tar.xz -C / && \
+    tar -xJf /tmp/s6-overlay-arch.tar.xz -C / && \
+    rm -f /tmp/s6-overlay-*.tar.xz
+
+# === Extracted upstream content (pre-staged by build.sh into ./ctx/<arch>/) ===
+
+# Immich server application code
+COPY ctx/${TARGETARCH}/immich-server/app-server /opt/immich-server
+COPY ctx/${TARGETARCH}/immich-server/build-www /build/www
+COPY ctx/${TARGETARCH}/immich-server/build-corePlugin /build/corePlugin
+
+# jellyfin-ffmpeg (from immich-server upstream image)
+COPY ctx/${TARGETARCH}/immich-server/jellyfin-ffmpeg /usr/lib/jellyfin-ffmpeg
+RUN ln -sf /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
+    ln -sf /usr/lib/jellyfin-ffmpeg/ffprobe /usr/local/bin/ffprobe
+
+# libvips and image processing libs (from immich-server /usr/local/lib)
+COPY ctx/${TARGETARCH}/immich-server/local-lib /usr/local/lib
+RUN ldconfig
+
+# Immich ML (application code + python runtime from immich-machine-learning)
+COPY ctx/${TARGETARCH}/immich-ml/immich_ml /opt/immich-ml/immich_ml
+COPY ctx/${TARGETARCH}/immich-ml/healthcheck.py /opt/immich-ml/healthcheck.py
+COPY ctx/${TARGETARCH}/immich-ml/opt-venv /opt/venv
+COPY ctx/${TARGETARCH}/immich-ml/python3.11-bin /usr/local/bin/python3.11
+COPY ctx/${TARGETARCH}/immich-ml/python3.11-lib /usr/local/lib/python3.11
+COPY ctx/${TARGETARCH}/immich-ml/libpython3.11.so.1.0 /usr/local/lib/libpython3.11.so.1.0
+RUN ln -sf /usr/local/lib/libpython3.11.so.1.0 /usr/local/lib/libpython3.11.so && \
+    ln -sf /usr/local/bin/python3.11 /usr/local/bin/python3 && \
+    ln -sf /usr/local/bin/python3 /usr/local/bin/python && \
+    ldconfig
+
+# Data directories (postgres user created by postgresql-17 package)
+RUN mkdir -p /data/library /data/postgres /data/redis /data/model-cache /data/backup && \
+    mkdir -p /var/run/postgresql /var/run/redis && \
+    chown -R postgres:postgres /data/postgres /var/run/postgresql && \
+    chown -R redis:redis /data/redis /var/run/redis
+
+# s6 services (dependencies.d/init now lives in source tree)
+COPY s6/services/ /etc/s6-overlay/s6-rc.d/
+
+# s6 init oneshot (runs before all services)
+COPY s6/init/ /etc/s6-overlay/s6-rc.d/init/
+
+# Utility scripts
+COPY scripts/ /app/scripts/
+RUN chmod +x /app/scripts/*.sh
+
+# s6 user bundle contents — which services to bring up
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d && \
+    for svc in postgres redis immich-ml immich-server init; do \
+        touch "/etc/s6-overlay/s6-rc.d/user/contents.d/$svc"; \
+    done
+
+# Environment defaults (DB_PASSWORD is generated at first run by init.sh into /data/.env)
+ENV IMMICH_VERSION=${IMMICH_VERSION} \
+    NODE_ENV=production \
+    UPLOAD_LOCATION=/data/library \
+    DB_DATA_LOCATION=/data/postgres \
+    DB_HOSTNAME=127.0.0.1 \
+    DB_PORT=5432 \
+    DB_USERNAME=immich \
+    DB_DATABASE_NAME=immich \
+    DB_VECTOR_EXTENSION=vectorchord \
+    REDIS_HOSTNAME=127.0.0.1 \
+    REDIS_PORT=6379 \
+    MACHINE_LEARNING_URL=http://localhost:3003 \
+    MACHINE_LEARNING_WORKERS=1 \
+    MACHINE_LEARNING_WORKER_CONCURRENCY=2 \
+    DISABLE_MACHINE_LEARNING=false \
+    ENABLE_MAP=false \
+    IMMICH_PORT=2283 \
+    ML_PORT=3003 \
+    TZ=Etc/UTC
+
+EXPOSE 2283
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=3 \
+    CMD curl -sf http://localhost:2283/api/server-info/ping || exit 1
+
+VOLUME ["/data"]
+
+ENTRYPOINT ["/init"]
