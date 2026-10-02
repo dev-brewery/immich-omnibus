@@ -1,13 +1,12 @@
 #!/command/with-contenv sh
-mkdir -p /var/run/redis /data/redis
-chown -R redis:redis /var/run/redis /data/redis
+mkdir -p /data/redis
+chown -R redis:redis /data/redis
 
-exec chpst -u redis redis-server \
+exec s6-setuidgid redis redis-server \
     --dir /data/redis \
-    --port 0 \
-    --unixsocket /var/run/redis/redis.sock \
-    --unixsocketperm 777 \
+    --bind 127.0.0.1 \
+    --port 6379 \
     --maxmemory 256mb \
-    --maxmemory-policy allkeys-lru \
+    --maxmemory-policy noeviction \
     --save 60 1000 \
     --save 300 100

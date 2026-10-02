@@ -5,7 +5,10 @@ if [ "${DISABLE_MACHINE_LEARNING}" = "true" ]; then
 fi
 
 cd /opt/immich-ml
-export MACHINE_LEARNING_PORT="${ML_PORT:-3003}"
+export PYTHONPATH="/opt/immich-ml"
+export PATH="/opt/venv/bin:$PATH"
 export MACHINE_LEARNING_CACHE_FOLDER="/data/model-cache"
+export IMMICH_HOST="127.0.0.1"
+export IMMICH_PORT="${ML_PORT:-3003}"
 
-exec python -m app.main
+exec python -m immich_ml

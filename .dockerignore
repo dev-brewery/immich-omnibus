@@ -1,0 +1,12 @@
+.git
+.gitignore
+.github
+.claude
+README.md
+LICENSE
+CLAUDE.md
+build.sh
+test.sh
+docker-compose.yml
+*.log
+tmp_*
